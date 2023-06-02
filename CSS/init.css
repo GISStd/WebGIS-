@@ -1,0 +1,701 @@
+html{
+    -webkit-locale: "en";
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    font-family: sans-serif;
+    line-height: 1.15;
+    --antd-wave-shadow-color: #1890ff;
+    --scroll-bar: 0;
+    height: 100%;
+    width: 100%;
+}
+body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    --antd-wave-shadow-color: #1890ff;
+    --scroll-bar: 0;
+    box-sizing: border-box;
+    padding: 0;
+    font-feature-settings: "tnum","tnum";
+    background-color: #fff;
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    font-family: microsoft yahei,sans-serif;
+    min-width: 1000px;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+.leftside-bar {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    --antd-wave-shadow-color: #1890ff;
+    --scroll-bar: 0;
+    font-feature-settings: "tnum","tnum";
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    -webkit-font-smoothing: antialiased;
+    font-family: microsoft yahei,sans-serif;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    animation: Sidebar_sidebarMove__JzeJ4 .3s;
+    background-color: #fff;
+    border-right: 1px solid #eaeaea;
+    height: 100%;
+    position: absolute;
+    transition: left .3s;
+    width: 380px;
+    z-index: 4;
+    left: 0;
+}
+
+.leftside-bar #title {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    font-size: 20px;
+    margin-top: 10px;
+    box-shadow: #696969 0px 1px 0.5px 0px;
+}
+
+.leftside-bar #slide-btn {
+    background-color: #fff;
+    border-left: 0;
+    box-shadow: 1px 0 2px #ccc;
+    color: #5d5d5d;
+    cursor: pointer;
+    font-size: 12px;
+    height: 50px;
+    margin-top: -25px;
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    width: 22px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.leftside-bar .apply-btn {
+    margin-top: 5px;
+    position: relative;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: #696969 0px 1px 0.5px 0px;
+}
+
+.apply-btn #add {
+    width: 100px;
+    height: 30px;
+    background-color: cornflowerblue;
+    cursor: pointer;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#add img {
+    width: 25px;
+    height: 25px;
+}
+
+.apply-btn .apply-span {
+    width: 120px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.apply-span span {
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.apply-span #vertical {
+    border-left: 1px solid rgba(0, 0, 0, .06);
+    border-top: 0;
+    display: inline-block;
+    height: 0.9em;
+    margin: 0 8px;
+    position: relative;
+    top: -0.06em;
+    vertical-align: middle;
+}
+
+.slide_in_animation {
+    animation: slip_in 1s;
+    transform: translateX(-100%);
+}
+
+.slide_out_animation {
+    animation: slip_out 1s;
+    transform: translateX(0%);
+}
+
+@keyframes slip_in {
+    from {
+        transform: translateX(0%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slip_out {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+.tools-draw {
+    border-radius: 2px;
+    box-shadow: 0 0 4px 2px hsla(0, 0%, 69%, .5);
+    position: absolute;
+    right: 15px;
+    top: 60px;
+    z-index: 5;
+    padding: 0;
+}
+
+.tools-draw>li {
+    background-color: #fff;
+    height: 35px;
+    transition: all .3s;
+    width: 35px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.tools-draw>li:first-child {
+    font-size: 26px;
+}
+
+.tools-draw>li:not(:last-child) {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.tools-draw>li img {
+    position: relative;
+    display: flex;
+    width: 70%;
+    height: 70%;
+}
+
+.clear-btn {
+    border-radius: 2px;
+    box-shadow: 0 0 4px 2px hsla(0, 0%, 69%, .5);
+    position: absolute;
+    right: 15px;
+    top: 335px;
+    z-index: 5;
+    padding: 0;
+}
+
+.clear-btn>li {
+    background-color: #fff;
+    display: flex;
+    font-size: 22px;
+    height: 35px;
+    transition: background-color .3s;
+    width: 35px;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-btn>li img {
+    position: relative;
+    width: 70%;
+    height: 70%;
+}
+
+.geodesic {
+    border-radius: 2px;
+    box-shadow: 0 0 4px 2px hsla(0, 0%, 69%, .5);
+    position: absolute;
+    right: 15px;
+    top: 400px;
+    z-index: 5;
+    padding: 0;
+}
+
+.geodesic>li {
+    background-color: #fff;
+    display: flex;
+    font-size: 22px;
+    height: 35px;
+    transition: background-color .3s;
+    width: 35px;
+    align-items: center;
+    justify-content: center;
+}
+
+.geodesic>li img {
+    position: relative;
+    width: 70%;
+    height: 70%;
+}
+
+.switchmap {
+    background: #fff;
+    border-radius: 2px;
+    bottom: 150px;
+    box-shadow: 0 0 4px 2px hsla(0, 0%, 69%, .5);
+    padding: 3px;
+    position: absolute;
+    right: 15px;
+    z-index: 101;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.switchmap img {
+    position: relative;
+    width: 70%;
+    height: 70%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#BasemapChange {
+    width: 180px;
+    height: 60px;
+    position: absolute;
+    right: 40px;
+    z-index: inherit;
+    background-color: rgba(128, 253, 211, 0.801);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.SelectButton {
+    width: 50px;
+    height: 50px;
+}
+
+.SelectButton:hover {
+    background-color: aquamarine;
+}
+
+.active {
+    box-shadow: 0 0 4px 2px hsla(0, 2%, 10%, 0.5);
+}
+
+#LayerControl {
+    position: absolute;
+    min-width: 100%;
+    height: 100%;
+    z-index: 4;
+    /*在地图容器中的层，要设置z-index的值让其显示在地图上层*/
+    color: #ffffff;
+    /* background-color: #4c4e5a; */
+    border-width: 10px;
+    /*边缘的宽度*/
+    border-radius: 10px;
+    /*圆角的大小 */
+    border-color: #000 #000 #000 #000;
+    /*边框颜色*/
+}
+
+.layerTree dd {
+    color: #363636;
+    /* background-color:#4c4e5a;  */
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+#layer_dt {
+    padding-left: 60px;
+    padding-right: 10px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-color: #339999;
+    color: #f5f5f5;
+    font-size: 16px;
+    position: relative;
+    line-height: 50px;
+    cursor: pointer;
+    background-image: url(../images/layer.png);
+    background-size: 40px 40px;
+}
+
+#layer_dt img {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+}
+
+.checkbox {
+    left: 20px;
+}
+
+/**
+* 提示框的样式信息
+*/
+.tooltip {
+    position: relative;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    color: white;
+    padding: 4px 8px;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+.tooltip-measure {
+    opacity: 1;
+    font-weight: bold;
+}
+
+.tooltip-static {
+    background-color: #ffcc33;
+    color: black;
+    border: 1px solid white;
+}
+
+.tooltip-measure:before,
+.tooltip-static:before {
+    border-top: 6px solid rgba(0, 0, 0, 0.5);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    margin-left: -7px;
+    left: 50%;
+}
+
+.tooltip-static:before {
+    border-top-color: #ffcc33;
+}
+
+.MarkMenu{
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.3);
+    min-height: 200px;
+    position: absolute;
+    right: 70px;
+    top: 75px;
+    width: 350px;
+    z-index: 5;
+}
+
+.MarkMenu #Menuhead{
+    align-items: center;
+    display: flex;
+    background-color: #3385ff;
+    color: #fff;
+    font-size: 16px;
+    justify-content: space-between;
+    line-height: 45px;
+    padding: 0 20px;
+}
+
+#Menuhead img{
+    cursor: pointer;
+}
+
+.EditMenu{
+    padding: 20px;
+}
+
+.Editrow{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.Editrow>label{
+    white-space: nowrap;
+}
+
+.ant-input{
+    font-feature-settings: "tnum","tnum";
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: rgba(0,0,0,.85);
+    display: inline-block;
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    margin: 0;
+    min-width: 0;
+    padding: 4px 11px;
+    position: relative;
+    transition: all .3s;
+    width: 100%;
+    overflow: visible;
+}
+
+.PointStyle{
+    padding: 0 0 20px;
+}
+
+.PointStyle-head{
+    background-color: #f2f2f2;
+    border-left: 4px solid #3385ff;
+    margin-bottom: 24px;
+    padding: 6px 10px;
+}
+
+.PointStyle-row{
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    align-items: center;
+    display: flex;
+}
+
+.LineStyle{
+    padding: 0 0 20px;
+}
+
+.LineStyle-head{
+    background-color: #f2f2f2;
+    border-left: 4px solid #3385ff;
+    margin-bottom: 24px;
+    padding: 6px 10px;
+}
+
+.LineStyle-row{
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    align-items: center;
+    display: flex;
+}
+
+.PolygonStyle{
+    padding: 0 0 20px;
+}
+
+.PolygonStyle-head{
+    background-color: #f2f2f2;
+    border-left: 4px solid #3385ff;
+    margin-bottom: 24px;
+    padding: 6px 10px;
+}
+
+.PolygonStyle-row{
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    align-items: center;
+    display: flex;
+}
+
+.CircleStyle{
+    padding: 0 0 20px;
+}
+
+.CircleStyle-head{
+    background-color: #f2f2f2;
+    border-left: 4px solid #3385ff;
+    margin-bottom: 24px;
+    padding: 6px 10px;
+}
+
+.CircleStyle-row{
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    align-items: center;
+    display: flex;
+}
+
+.RectangleStyle{
+    padding: 0 0 20px;
+}
+
+.RectangleStyle-head{
+    background-color: #f2f2f2;
+    border-left: 4px solid #3385ff;
+    margin-bottom: 24px;
+    padding: 6px 10px;
+}
+
+.RectangleStyle-row{
+    justify-content: flex-start;
+    margin-bottom: 24px;
+    align-items: center;
+    display: flex;
+}
+
+.ant-input-number{
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    box-sizing: border-box;
+    color: rgba(0,0,0,.85);
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+    position: relative;
+    transition: all .3s;
+    width: 100%;
+    width: 90px;
+}
+.ant-input-number-input{
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    overflow: visible;
+    appearance: textfield!important;
+    background-color: initial;
+    border: 0;
+    border-radius: 2px;
+    height: 30px;
+    outline: 0;
+    padding: 0 11px;
+    text-align: left;
+    transition: all .3s linear;
+    width: 100%;
+    touch-action: manipulation;
+}
+
+.EditButtons{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    width: 60%;
+}
+
+.ant-btn{
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 32px;
+    padding: 4px 15px;
+    position: relative;
+    text-align: center;
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+    user-select: none;/*用户无法选中文本 */
+    white-space: nowrap;
+}
+
+.ant-btn-primary{
+    outline: 0;
+    background: #1890ff;
+    border-color: #1890ff;
+    box-shadow: 0 2px 0 rgba(0,0,0,.045);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.12);
+}
+
+.ant-btn-default{
+    background: #fff;
+    box-shadow: 0 2px 0 rgba(0,0,0,.015);
+    color: rgba(0,0,0,.85);
+    outline: 0;
+}
+
+.marker {
+    width: 40px;
+    height: 40px;
+    /* border: 1px solid #088; */
+    border-radius: 10px;
+    /* background-color: #0FF; */
+    background-image: url(../images/blueIcon.png);
+    background-size: cover;
+    opacity: 0.5;
+}
+
+.address {
+    text-decoration: none;
+    color: #aa3300;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: black 0.1em 0.1em 0.2em;
+}
+
+.search {
+    font-size: 13px;
+    border: 1px solid #999999;
+}
+
+.ls {
+    line-height: 27px;
+    padding-left: 7px;
+}
+
+.prompt {
+    display: none;
+    font-size: 13px;
+    border: 1px solid #999999;
+}
+
+.statistics {
+    display: none;
+    font-size: 13px;
+    border: 1px solid #999999;
+    overflow-y: scroll;
+    height: 150px;
+}
+
+.suggests {
+    display: none;
+    font-size: 13px;
+    border: 1px solid #999999;
+}
+
+;
+.lineData {
+    display: none;
+    font-size: 13px;
+    border: 1px solid #999999;
+}
+
+.result {
+    display: none;
+    font-size: 12px;
+    border: 1px solid #999999;
+    line-height: 27px;
+    padding-left: 7px;
+}

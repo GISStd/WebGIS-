@@ -1,0 +1,19 @@
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#layertree li>span {
+    cursor: pointer;
+}
+
+#layertree {
+    background: #eeeff5 none repeat scroll 0 0;
+    opacity: 0.9;
+    z-index: 1003;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    width: 270px;
+}

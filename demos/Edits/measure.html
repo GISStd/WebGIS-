@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measure</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+    <script src="../../libs/jquery-3.6.4.js"></script>
+    <link rel="stylesheet" href="../../CSS/measure.css">
+</head>
+
+<body>
+    <div id="map">
+        <div id="menu">
+            <label>Geometry type &nbsp;</label>
+            <select id="type">
+                <option value="length">Length</option>
+                <option value="area">Area</option>
+            </select>
+            <label class="checkbox"><input type="checkbox" id="geodesic" />use geodesic measures</label>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var key = "4f637654e9a5293faa04cb97e1913ad6"
+
+        var VecLayer = new ol.layer.Tile({
+            title: "天地图矢量图层",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var CvaLayer = new ol.layer.Tile({
+            title: "天地图矢量注记",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+
+        // 实例化map对象并加载地图
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                VecLayer,
+                CvaLayer
+            ],
+            view: new ol.View({
+                center: [12735113, 3570836],
+                zoom: 4
+            }),
+            loadTilesWhileAnimating: true,
+        });
+    </script>
+    <script src="../../JS/measure.js"></script>
+</body>
+
+</html>

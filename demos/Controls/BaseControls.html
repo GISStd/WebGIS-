@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controls</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+    <script src="../../libs/jquery-3.6.4.js"></script>
+    <link rel="stylesheet" href="../../CSS/basecontrol.css">
+</head>
+
+<body>
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" id="zoom-out" value="单击缩小" />
+        <input type="button" class="ButtonLib" id="zoom-in" value="单击放大" />
+        <input type="button" class="ButtonLib" id="panto" value="平移到【中国】" />
+        <input type="button" class="ButtonLib" id="restore" value="复位" />
+    </div>
+    <div id="map">
+        <div id="mouse-position">
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //实例化鼠标位置控件（MousePosition）
+        var mousePositionControl = new ol.control.MousePosition({
+            //坐标格式
+            coordinateFormat: ol.coordinate.createStringXY(4),
+            //地图投影坐标系（若未设置则输出为默认投影坐标系下的坐标）
+            projection: 'EPSG:4326',
+            //坐标信息显示样式类名，默认是'ol-mouse-position'
+            className: 'custom-mouse-position',
+            //显示鼠标位置信息的目标容器
+            target: document.getElementById('mouse-position'),
+            //未定义坐标的标记
+            undefinedHTML: '&nbsp;'
+        });
+
+        //实例化导航控件
+        var zoomtoExtendControl = new ol.control.ZoomToExtent({
+            extent: [
+                12735013.7791264898, 3570236.284081122,
+                12735361.9639063801, 3571326.986909639
+            ]
+        });
+
+        //实例化缩放控制条
+        var zoomSliderControl = new ol.control.ZoomSlider();
+
+         //实例化比例尺控件（ScaleLine）
+         var scaleLineControl = new ol.control.ScaleLine({
+            //设置比例尺单位，degrees、imperial、us、nautical、metric（度量单位）
+            units: "metric" 
+        });
+
+        var key = "4f637654e9a5293faa04cb97e1913ad6"
+
+        var VecLayer = new ol.layer.Tile({
+            title: "天地图矢量图层",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var CvaLayer = new ol.layer.Tile({
+            title: "天地图矢量注记",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+
+        // 实例化map对象并加载地图
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                VecLayer,
+                CvaLayer
+            ],
+            view: new ol.View({
+                center: [12735113, 3570836],
+                zoom: 4
+            }),
+            loadTilesWhileAnimating: true,
+        });
+
+        map.addControl(mousePositionControl);
+        map.addControl(zoomtoExtendControl);
+        map.addControl(zoomSliderControl);
+        map.addControl(scaleLineControl);
+    </script>
+    <script type="text/javascript">
+        //地图视图的初始参数
+        var view = map.getView();
+        var zoom = view.getZoom();
+        var center = view.getCenter();
+        var rotation = view.getRotation();
+
+        //单击缩小按钮功能
+        document.getElementById('zoom-out').onclick = function () {
+            //获取地图视图
+            var view = map.getView();
+            //获得当前缩放级数
+            var zoom = view.getZoom();
+            //地图缩小一级
+            view.setZoom(zoom - 1);
+        };
+        //单击放大按钮功能
+        document.getElementById('zoom-in').onclick = function () {
+            //获取地图视图
+            var view = map.getView();
+            //获得当前缩放级数
+            var zoom = view.getZoom();
+            view.setZoom(zoom + 1);
+            //地图放大一级   
+        };
+        //view.setZoom(zoom + 1);
+        //平移功能（移到到武汉市）
+        document.getElementById('panto').onclick = function () {
+            //获取地图视图
+            var view = map.getView();
+            var wh = ol.proj.fromLonLat([105, 35]);
+            //平移地图
+            view.setCenter(wh);
+            view.setZoom(5);
+        };
+        //复位功能（复位到初始状态）
+        document.getElementById('restore').onclick = function () {
+            //初始中心点
+            view.setCenter(center);
+            //初始旋转角度
+            view.setRotation(rotation);
+            //初始缩放级数
+            view.setZoom(zoom);
+        };
+
+        //为内置的缩放控件与旋转控件添加tooltip提示信息
+        $('.ol-zoom-in, .ol-zoom-out').tooltip({
+            //tooltip在右侧显示
+            placement: 'right'
+        });
+        //tooltip在左侧显示
+        $('.ol-rotate-reset, .ol-attribution button[title]').tooltip({
+            placement: 'left'
+        });
+    </script>
+</body>
+
+</html>

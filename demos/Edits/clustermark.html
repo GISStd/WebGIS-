@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClusterMark</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+    <script src="../../libs/jquery-3.6.4.js"></script>
+    <link rel="stylesheet" href="../../CSS/mark.css">
+</head>
+
+<body>
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" id="addFeatures" value="添加聚合标注" />
+        <input type="button" class="ButtonLib" id="removeFeatures" value="移除聚合标注" />
+    </div>
+    <div id="map">
+    </div>
+    <script type="text/javascript">
+        //此示例创建10000个要素
+        var count = 10000;
+        var features = new Array(count);
+        var e = 4500000;
+        for (var i = 0; i < count; ++i) {
+            var coordinates = [2 * e * Math.random() - e, 2 * e * Math.random() - e];
+            features[i] = new ol.Feature(new ol.geom.Point(coordinates));
+        }
+        //矢量要素数据源
+        var source = new ol.source.Vector({
+            features: features
+        });
+        //聚合标注数据源
+        var clusterSource = new ol.source.Cluster({
+            distance: 40,
+            source: source
+        });
+        //加载聚合标注的矢量图层
+        var styleCache = {};
+        var clusters = new ol.layer.Vector({
+            source: clusterSource,
+            style: function (feature, resolution) {
+                var size = feature.get('features').length;
+                var style = styleCache[size];
+                if (!style) {
+                    style = [
+                        new ol.style.Style({
+                            image: new ol.style.Circle({
+                                radius: 10,
+                                stroke: new ol.style.Stroke({
+                                    color: '#fff'
+                                }),
+                                fill: new ol.style.Fill({
+                                    color: '#3399CC'
+                                })
+                            }),
+                            text: new ol.style.Text({
+                                text: size.toString(),
+                                fill: new ol.style.Fill({
+                                    color: '#fff'
+                                })
+                            })
+                        })
+                    ];
+                    styleCache[size] = style;
+                }
+                return style;
+            }
+        });
+
+        var key = "4f637654e9a5293faa04cb97e1913ad6"
+        //实例化Map对象加载地图，默认加载聚合标注图层
+        var map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    title: "天地图矢量图层",
+                    source: new ol.source.XYZ({
+                        url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + key,
+                        wrapX: false
+                    })
+                }),
+                new ol.layer.Tile({
+                    title: "天地图矢量注记图层",
+                    source: new ol.source.XYZ({
+                        url: "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + key,
+                        wrapX: false
+                    })
+                }),
+                //聚合标注图层
+                clusters
+            ],
+            //地图容器div的ID
+            target: 'map',
+            view: new ol.View({
+                //地图初始中心点
+                center: [0, 0],
+                minZoom: 2,
+                zoom: 2
+            })
+        });
+
+        //添加聚合标注
+        document.getElementById('addFeatures').onclick = function () {
+            //当前聚合标注数据源中的要素
+            var currentFeatrues = clusterSource.getSource().getFeatures();
+            //如果聚合标注数据源中没有要素，则重新添加要素
+            if (currentFeatrues.length == 0) {
+                clusterSource.getSource().addFeatures(features);
+                clusters.setSource(clusterSource);
+                map.addLayer(clusters);
+            }
+        };
+        //移除聚合标注
+        document.getElementById('removeFeatures').onclick = function () {
+            //当前聚合标注数据源中的要素
+            var currentFeatrues = clusterSource.getSource().getFeatures();
+            //如果聚合标注数据源中没有要素，则重新添加要素
+            if (currentFeatrues.length != 0) {
+                //移除聚合标注数据源中的所有要素
+                clusterSource.getSource().clear();
+                //移除标注图层
+                map.removeLayer(clusters);
+            }
+        };
+        //一开始移除聚合标注
+        document.getElementById('removeFeatures').onclick();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/base.css">
+    <script src="libs/jquery-3.6.4.js"></script>
+    <script src="JS/init.js"></script>
+    <title>主界面</title>
+</head>
+
+<body>
+    <div id="header">
+        <div class="head-left">
+            <span id="list"></span>
+            <img src="./images/layer.png" alt="logo">
+            <div class="search-box">
+                <span id="search-wrapper">
+                    <span id="search-text">
+                        <input type="text" placeholder="搜索位置" maxlength="50" value>
+                    </span>
+                    <span id="search-button">
+                        <button type="button" class="button">
+                            <span id="button-img"></span>
+                        </button>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="head-right">
+            <div id="toolbox">
+                <span id="toolbox-span">工具</span>
+                <img src="./images/展开.png">
+                <!-- <ul class="toolbox-container">
+                    <li>打印<img src=""></li>
+                    <li>分享<img src=""></li>
+                </ul> -->
+            </div>
+            <span id="user">
+                <img src="./images/我的头像.jpg">
+            </span>
+        </div>
+    </div>
+    <div id="content">
+        <div class="iframe_wrapper">
+            <iframe id="container_iframe" name="container_iframe" scrolling="no"></iframe>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        //list的点击事件
+        $("#list").click(function () {
+            $("#container_iframe").contents().find(".leftside-bar").toggleClass("slide_out_animation");
+            $("#container_iframe").contents().find(".leftside-bar").toggleClass("slide_in_animation");
+        })
+
+        //工具栏点击事件
+        $("#toolbox-span").click(function () {
+            if ($("#toolbox-span").hasClass("active")) {
+                $("#toolbox-span").toggleClass("active");
+                $("#toolbox img").animate({ rotate: '0deg' })
+                $("#toolbox ul").remove();
+            } else {
+                $("#toolbox-span").toggleClass("active");
+                $("#toolbox img").animate({ rotate: '180deg' })
+                var ul = $("<ul class='toolbox-container'></ul>").appendTo($("#toolbox"));
+                var li1 = $("<li>打印<img src=''></li>").appendTo(ul);
+                var li2 = $("<li>分享<img src=''></li>").appendTo(ul);
+            }
+        })
+
+        //左侧边框绑定子页面图层
+
+    </script>
+</body>
+
+</html>

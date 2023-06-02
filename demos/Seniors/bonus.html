@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="天地图"/>
+    <title>天地图－地图API－范例－关键字输入提示词条</title>
+    <style type="text/css">
+    body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: "Microsoft YaHei"
+    }
+
+    #mapDiv {
+        width: 100%;
+        height:400px
+    }
+
+    input, b, p {
+        margin-left: 5px;
+        font-size: 14px
+    }
+    
+    ul, li {
+        list-style: none;
+    }
+
+    .search {
+        font-size: 13px;
+        border: 1px solid #999999;
+        line-height: 27px;
+        padding-left: 7px;
+    }
+
+    .suggests {
+        display: none;
+        font-size: 13px;
+        border: 1px solid #999999;
+    }
+    </style>
+    <script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=4f637654e9a5293faa04cb97e1913ad6"></script>
+	<script src="http://lbs.tianditu.gov.cn/js/lib/jquery/jquery-1.7.2.min.js"></script>
+    <script>
+        var map;
+        var zoom = 12;
+        var localsearch;
+        var infoWin;
+        function onLoad() {
+            //初始化地图对象
+            map = new T.Map("mapDiv");
+            //设置显示地图的中心点和级别
+            map.centerAndZoom(new T.LngLat(116.40969, 39.89945), zoom);
+            //允许鼠标滚轮缩放地图
+
+            var config = {
+                pageCapacity: 10,	//每页显示的数量
+                onSearchComplete: localSearchResult	//接收数据的回调函数
+            };
+            //创建搜索对象
+            localsearch = new T.LocalSearch(map, config);
+            $("#keyWord").keyup(function () {
+                localsearch.search(document.getElementById('keyWord').value,5)
+            });
+        }
+
+        function localSearchResult(result) {
+            //清空地图及搜索列表
+            clearAll();
+
+            //解析建议词信息
+            suggests(result.getSuggests());
+        }
+
+        //解析建议词信息
+        function suggests(obj) {
+            if (obj) {
+                //建议词提示，如果搜索类型为公交规划建议词或公交站搜索时，返回结果为公交信息的建议词。
+                var suggestsHtml = "<div style='margin-left:8px;'>建议词提示</div><ul>";
+                for (var i = 0; i < obj.length; i++) {
+                    suggestsHtml += "<li>" + obj[i].name + "&nbsp;&nbsp;<font style='color:#666666'>" + obj[i].address + "</font></li>";
+                }
+                suggestsHtml += "</ul>";
+                document.getElementById("suggestsDiv").style.display = "block";
+                document.getElementById("suggestsDiv").innerHTML = suggestsHtml;
+            }
+        }
+
+        //清空地图及搜索列表
+        function clearAll() {
+            map.clearOverLays();
+            document.getElementById("suggestsDiv").innerHTML = "";
+            document.getElementById("suggestsDiv").style.display = "none";
+        }
+    </script>
+</head>
+<body onLoad="onLoad()">
+<div id="mapDiv"></div>
+<p>本示例演示如何根据关键字搜索建议词。</p>
+<div>
+    <!-- 搜索面板 -->
+	搜索内容：<input type="text" id="keyWord" value="中关村" onpropertychange="localsearch.search(document.getElementById('keyWord').value,4)"/>
+    <br/>
+    <!-- 建议词面板 -->
+    <div id="suggestsDiv" class="suggests"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mark</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+    <script src="../../libs/jquery-3.6.4.js"></script>
+    <link rel="stylesheet" href="../../CSS/mark.css">
+</head>
+
+<body>
+    <div id="menu">
+        选择标注类型后用鼠标在地图上点击添加标注：
+        <label class="checkbox"><input type="radio" name="label" value="vector" />Vector Labels</label>
+        <label class="checkbox"><input type="radio" name="label" value="overlay" />Overlay Labels</label>
+    </div>
+    <div id="map">
+    </div>
+    <div id="label" style="display: none;">
+        <div id="marker" class="marker" title="Marker">
+            <a class="address" id="address" target="_blank" href="http://www.openlayers.org/">标注点</a>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var key = "4f637654e9a5293faa04cb97e1913ad6"
+        var beijing = ol.proj.fromLonLat([116.28, 39.54]);
+        var wuhan = ol.proj.fromLonLat([114.21, 30.37]);
+
+        //实例化Map对象加载地图,默认底图加载MapQuest地图
+        var map = new ol.Map({
+            layers: [
+                new ol.layer.Tile({
+                    title: "天地图矢量图层",
+                    source: new ol.source.XYZ({
+                        url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + key,
+                        wrapX: false
+                    })
+                }),
+                new ol.layer.Tile({
+                    title: "天地图矢量注记图层",
+                    source: new ol.source.XYZ({
+                        url: "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + key,
+                        wrapX: false
+                    })
+                })
+            ],
+            //地图容器div的ID
+            target: 'map',
+            view: new ol.View({
+                //地图初始中心点
+                center: beijing,
+                maxZoom: 19,
+                minZoom: 1,
+                zoom: 4
+            })
+        });
+
+        /**
+        * 创建矢量标注样式函数,设置image为图标ol.style.Icon
+        * @param {ol.Feature} feature 要素
+        */
+        var createLabelStyle = function (feature) {
+            return new ol.style.Style({
+                image: new ol.style.Icon(
+                    /** @type {olx.style.IconOptions} */
+                    ({
+                        anchor: [0.5, 60],
+                        anchorOrigin: 'top-right',
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        offsetOrigin: 'top-right',
+                        // offset:[0,10],
+                        //图标缩放比例
+                        // scale:0.5,
+                        //透明度
+                        opacity: 0.75,
+                        //图标的url
+                        src: '../../images/blueIcon.png'
+                    })),
+                text: new ol.style.Text({
+                    //位置
+                    textAlign: 'center',
+                    //基准线
+                    textBaseline: 'middle',
+                    //文字样式
+                    font: 'normal 14px 微软雅黑',
+                    //文本内容
+                    text: feature.get('name'),
+                    //文本填充样式（即文字颜色）
+                    fill: new ol.style.Fill({ color: '#aa3300' }),
+                    stroke: new ol.style.Stroke({ color: '#ffcc33', width: 2 })
+                })
+            });
+        }
+
+        //实例化Vector要素，通过矢量图层添加到地图容器中
+        var iconFeature = new ol.Feature({
+            geometry: new ol.geom.Point(beijing),
+            //名称属性
+            name: '北京市',
+            //大概人口数（万）
+            population: 2115
+        });
+        iconFeature.setStyle(createLabelStyle(iconFeature));
+        //矢量标注的数据源
+        var vectorSource = new ol.source.Vector({
+            features: [iconFeature]
+        });
+        //矢量标注图层
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource
+        });
+        map.addLayer(vectorLayer);
+
+        // 实例化overlay标注，添加到地图容器中
+        var marker = new ol.Overlay({
+            position: wuhan,
+            positioning: 'center-center',
+            element: document.getElementById('marker'),
+            stopEvent: false
+        });
+        map.addOverlay(marker);
+        marker.getElement().title = "武汉市";
+        var text = new ol.Overlay({
+            position: wuhan,
+            element: document.getElementById('address')
+        });
+        map.addOverlay(text);
+        text.getElement().innerText = marker.getElement().title;
+    </script>
+    <script src="../../JS/addmark.js"></script>
+</body>
+
+</html>

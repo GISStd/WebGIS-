@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Openlayers</title>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+    <script src="../../libs/jquery-3.6.4.js"></script>
+    <link rel="stylesheet" href="../../CSS/init.css">
+    <link rel="stylesheet" href="../../CSS/measure.css">
+</head>
+
+<body>
+    <div class="leftside-bar">
+        <div id="title">当前图层</div>
+        <span id="slide-btn"><img src=""></span>
+        <div class="apply-btn">
+            <button id="add">
+                <img src="../../images/添加.png">
+                <span>新增图层</span>
+            </button>
+            <div class="apply-span">
+                <span id="save">保存</span>
+                <div id="vertical"></div>
+                <span id="clear">清除</span>
+            </div>
+        </div>
+        <div id="LayerControl">
+            <!-- <div id="BasemapChange">
+                <div class="SelectButton" id="veclay">矢量图层</div>
+                <div class="SelectButton" id="imglay">影像图层</div>
+                <div class="SelectButton" id="terlay">地形图层</div>
+            </div> -->
+            <dl class="layerTree" id="layerTree">
+                <dt id="layer_dt">底图图层<img src=""></dt>
+            </dl>
+        </div>
+    </div>
+    <ul class="tools-draw">
+        <li id="point"><img src="../../images/标点.png"></li>
+        <li id="line"><img src="../../images/绘制线段.png"></li>
+        <li id="polygon"><img src="../../images/绘制多边形.png"></li>
+        <li id="circle"><img src="../../images/绘制圆形.png"></li>
+        <li id="rectangle"><img src="../../images/绘制矩形.png"></li>
+        <li id="measure-distance"><img src="../../images/测量距离.png"></li>
+        <li id="measure-area"><img src="../../images/测量面积.png"></li>
+    </ul>
+    <ul class="clear-btn">
+        <li><img src="../../images/删除.png"></li>
+    </ul>
+    <ul class="geodesic" onclick="getgeodesic()">
+        <label class="checkbox" style="display: none;"><input type="checkbox" id="geodesic" />use geodesic
+            measures</label>
+        <li><img src="../../images/测地线.png"></li>
+    </ul>
+    <div class="switchmap">
+        <img src="../../images/地球.png">
+    </div>
+    <div id="map">
+        <div class="MarkMenu">
+            <header id="Menuhead">
+                <span>标点</span>
+                <img src="">
+            </header>
+            <div
+                style="position: relative;overflow: hidden;width: 100%;height: auto;min-height: 200px;max-height: calc(100vh - 190px);">
+                <div
+                    style="position: relative;overflow: scroll;margin-right: -17px;margin-bottom: -17px;min-height: 217px;max-height: calc(100vh - 190px + 17px);">
+                    <div class="EditMenu">
+                        <div class="Editrow">
+                            <label>名称：</label>
+                            <input id="name" maxlength="50" class="ant-input" type="text">
+                        </div>
+                        <div class="Editrow">
+                            <label>备注：</label>
+                            <textarea rows="2" class="ant-input"></textarea>
+                        </div>
+                        <div class="PointStyle">
+                            <header class="PointStyle-head">样式设置</header>
+                            <div class="PointStyle-row">
+                                <label>符号大小：</label>
+                                <div class="ant-input-number">
+                                    <input id="pointsize" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="PointStyle-row">
+                                <label>符号颜色：</label>
+                                <div class="ant-input-number">
+                                    <input id="pointcolor" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="LineStyle">
+                            <header class="LineStyle-head">样式设置</header>
+                            <div class="LineStyle-row">
+                                <label>线宽：</label>
+                                <div class="ant-input-number">
+                                    <input id="linewidth" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="LineStyle-row">
+                                <label>符号颜色：</label>
+                                <div class="ant-input-number">
+                                    <input id="linecolor" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="PolygonStyle">
+                            <header class="PolygonStyle-head">样式设置</header>
+                            <div class="PolygonStyle-row">
+                                <label>线宽：</label>
+                                <div class="ant-input-number">
+                                    <input id="boardwidth" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="PolygonStyle-row">
+                                <label>符号颜色：</label>
+                                <div class="ant-input-number">
+                                    <input id="polygoncolor" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="PolygonStyle-row">
+                                <label>透明度：</label>
+                                <div class="ant-input-number">
+                                    <input id="popacity" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="CircleStyle">
+                            <header class="CircleStyle-head">样式设置</header>
+                            <div class="CircleStyle-row">
+                                <label>线宽：</label>
+                                <div class="ant-input-number">
+                                    <input id="circlewidth" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="CircleStyle-row">
+                                <label>符号颜色：</label>
+                                <div class="ant-input-number">
+                                    <input id="circlecolor" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="CircleStyle-row">
+                                <label>透明度：</label>
+                                <div class="ant-input-number">
+                                    <input id="copacity" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="RectangleStyle">
+                            <header class="RectangleStyle-head">样式设置</header>
+                            <div class="RectangleStyle-row">
+                                <label>线宽：</label>
+                                <div class="ant-input-number">
+                                    <input id="rectwidth" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="RectangleStyle-row">
+                                <label>符号颜色：</label>
+                                <div class="ant-input-number">
+                                    <input id="rectcolor" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                            <div class="RectangleStyle-row">
+                                <label>透明度：</label>
+                                <div class="ant-input-number">
+                                    <input id="ropacity" autocomplete="off" role="spinbutton" aria-valuemin="16"
+                                        aria-valuemax="50" aria-valuenow="30" step="1" class="ant-input-number-input">
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="Editrow">
+                            <div class="EditButtons">
+                                <button type="button" class="ant-btn ant-btn-primary"><span>确 定</span></button>
+                                <button type="button" class="ant-btn ant-btn-default"><span>删 除</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="overlay" style="display: none;">
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        //图层控件
+        var layer = new Array();  //map中的图层数组
+        var layerName = new Array();  //图层名称数组
+        var layerVisibility = new Array();  //图层可见属性数组
+
+        function loadLayersControl(map, id) {
+            var treeContent = document.getElementById(id); //图层目录容器
+
+            var layers = map.getLayers(); //获取地图中所有图层
+            for (var i = 0; i < layers.getLength(); i++) {
+                //获取每个图层的名称、是否可见属性
+                layer[i] = layers.item(i);
+                layerName[i] = layer[i].get('title');
+                layerVisibility[i] = layer[i].getVisible();
+
+                //新增dd元素，用来承载图层项
+                var elementdd = document.createElement('dd');
+                treeContent.appendChild(elementdd); // 添加子节点
+                //创建复选框元素
+                var elementInput = document.createElement('input');
+                elementInput.type = "checkbox";
+                elementInput.name = "layers";
+                elementdd.appendChild(elementInput);
+                //创建label元素
+                var elementLable = document.createElement('label');
+                elementLable.className = "layer";
+                //设置图层名称
+                setInnerText(elementLable, layerName[i]);
+                elementdd.appendChild(elementLable);
+
+                //设置图层默认显示状态
+                if (layerVisibility[i]) {
+                    elementInput.checked = true;
+                }
+                addChangeEvent(elementInput, layer[i]);  //为checkbox添加变更事件                                         
+            }
+        }
+        /**
+        * 为checkbox元素绑定变更事件
+        * @param {input} element checkbox元素
+        * @param {ol.layer.Layer} layer 图层对象
+        */
+        function addChangeEvent(element, layer) {
+            element.onclick = function () {
+                if (element.checked) {
+                    layer.setVisible(true); //显示图层
+                }
+                else {
+                    layer.setVisible(false); //不显示图层
+                }
+            };
+        }
+        /**
+        * 动态设置元素文本内容（兼容）
+        */
+        function setInnerText(element, text) {
+            if (typeof element.textContent == "string") {
+                element.textContent = text;
+            } else {
+                element.innerText = text;
+            }
+        }
+
+        /**
+         * 更新复选框选中
+         */
+        function UpdateCheckBox(element, Visibility) {
+            console.log(Visibility)
+            if (Visibility) {
+                element.prop('checked', true)
+            } else {
+                element.prop('checked', false)
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        var key = "4f637654e9a5293faa04cb97e1913ad6"
+
+        var VecLayer = new ol.layer.Tile({
+            title: "天地图矢量图层",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var CvaLayer = new ol.layer.Tile({
+            title: "天地图矢量注记",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var ImgLayer = new ol.layer.Tile({
+            title: "天地图影像图层",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var CiaLayer = new ol.layer.Tile({
+            title: "天地图影像注记",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var TerLayer = new ol.layer.Tile({
+            title: "天地图地形图层",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+        var CtaLayer = new ol.layer.Tile({
+            title: "天地图地形注记",
+            source: new ol.source.XYZ({
+                url: "http://t0.tianditu.com/DataServer?T=cta_w&x={x}&y={y}&l={z}&tk=" + key,
+                wrapX: false
+            })
+        });
+
+
+        // 实例化map对象并加载地图
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                VecLayer,
+                CvaLayer,
+                ImgLayer,
+                CiaLayer,
+                TerLayer,
+                CtaLayer
+            ],
+            view: new ol.View({
+                center: [12735113, 3570836],
+                zoom: 9
+            }),
+            loadTilesWhileAnimating: true,
+        });
+
+        loadLayersControl(map, 'layerTree')
+
+        //关闭所有图层
+        function LayersClose() {
+            VecLayer.setVisible(false);
+            CvaLayer.setVisible(false);
+            ImgLayer.setVisible(false);
+            CiaLayer.setVisible(false);
+            TerLayer.setVisible(false);
+            CtaLayer.setVisible(false);
+        }
+
+        //改变复选框
+        function CheckBoxChange() {
+            var layers = map.getLayers(); //获取地图中所有图层
+            for (var i = 0; i < layers.getLength(); i++) {
+                //获取图层可见性
+                layerVisibility[i] = layer[i].getVisible();
+                var element = $("input:checkbox").eq(i);
+                UpdateCheckBox(element, layerVisibility[i]);
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        $(".leftside-bar").addClass("slide_in_animation")
+        //侧边按钮的点击事件
+        $("#slide-btn").click(function () {
+            $(".leftside-bar").toggleClass("slide_out_animation");
+            $(".leftside-bar").toggleClass("slide_in_animation");
+        })
+
+        //切换地图图层点击事件
+        $(".switchmap").click(function () {
+            if ($(".switchmap").hasClass("active")) {
+                $(".switchmap").toggleClass("active")
+                $("#BasemapChange").remove();
+            } else {
+                $(".switchmap").toggleClass("active")
+                var buttondiv = $("<div id='BasemapChange'></div>").appendTo($(".switchmap"));
+                var selectbutton = $("<div class='SelectButton' id='veclay'>矢量图层</div>").appendTo(buttondiv);
+                var selectbutton = $("<div class='SelectButton' id='imglay'>影像图层</div>").appendTo(buttondiv);
+                var selectbutton = $("<div class='SelectButton' id='terlay'>地形图层</div>").appendTo(buttondiv);
+
+                //点击选择展开的图层
+                $('#veclay').click(function () {
+                    console.log('已执行')
+                    LayersClose();
+                    VecLayer.setVisible(true);
+                    CvaLayer.setVisible(true);
+                    CheckBoxChange();
+                });
+
+                $('#imglay').click(function () {
+                    LayersClose();
+                    ImgLayer.setVisible(true);
+                    CiaLayer.setVisible(true);
+                    CheckBoxChange();
+                });
+
+                $('#terlay').click(function () {
+                    LayersClose();
+                    TerLayer.setVisible(true);
+                    CtaLayer.setVisible(true);
+                    CheckBoxChange();
+                });
+            }
+        });
+
+        function displayClose() {
+            $(".MarkMenu").css("display", "none");
+            $(".PointStyle").css("display", "none");
+            $("#name").val(null);
+            $("#pointsize").val(null);
+            $("#pointcolor").val(null)
+            $(".LineStyle").css("display", "none");
+            $("#linecolor").val(null);
+            $("#linewidth").val(null);
+            $(".PolygonStyle").css("display", "none");
+            $("#boardwidth").val(null);
+            $("#polygoncolor").val(null);
+            $("#popacity").val(null);
+            $(".CircleStyle").css("display", "none");
+            $("#circlewidth").val(null);
+            $("#circlecolor").val(null);
+            $("#copacity").val(null);
+            $(".RectangleStyle").css("display", "none");
+            $("#rectwidth").val(null);
+            $("#rectcolor").val(null);
+            $("#ropacity").val(null);
+        }
+
+        displayClose();
+
+        function getgeodesic() {
+            if ($(".geodesic").hasClass("active")) {
+                $('.geodesic').toggleClass("active")
+                $('#geodesic').prop("checked", "true");
+            } else {
+                $('.geodesic').toggleClass("active")
+                $('#geodesic').prop("checked", "false");
+            }
+        }
+    </script>
+
+    <script src="../../JS/draw.js"></script>
+    <script src="../../JS/drawpoints.js"></script>
+    <script src="../../JS/layercontrol.js"></script>
+    <script src="../../JS/measure.js"></script>
+    <script src="../../JS/overlaymark.js"></script>
+
+</body>
+
+</html>
